@@ -37,7 +37,6 @@ const signInWithGoogle = async () => {
         displayName.split(" ")[0],
         displayName.split(" ")[1],
       );
-      console.log("I made it here");
       router.push("/");
     } else {
       signOut(auth);
@@ -45,6 +44,7 @@ const signInWithGoogle = async () => {
       errorMessage.value = "Something went wrong, please try again.";
     }
   } catch (error) {
+    signOut(auth);
     console.error("Google Sign In Error:", error);
     errorMessage.value = error.message;
   }

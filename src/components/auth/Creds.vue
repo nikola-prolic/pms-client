@@ -97,7 +97,7 @@ import auth from "@/utils/firebase";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/userStore";
 
-const userStore = useUserStore;
+const userStore = useUserStore();
 const router = useRouter();
 
 const firstName = ref("");
@@ -130,11 +130,6 @@ const handleSignUp = async () => {
       auth,
       email.value,
       password.value,
-    );
-    await userStore.fetchUserDetailsByEmail(
-      email.value,
-      firstName.value,
-      lastName.value,
     );
     router.push("/");
   } catch (error) {

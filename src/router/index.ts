@@ -68,13 +68,19 @@ router.beforeEach(
     const requiresAuth = to.matched.some(
       (record: RouteRecordRaw) => record.meta!.requiresAuth,
     );
+    const isAuthRoute = to.path === "/auth";
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
-      if (requiresAuth && !user) {
-        next("/auth"); // Redirect to the Auth page if not authenticated
+      if (user && isAuthRoute) {
+        // If the user is already authenticated and is trying to access the /auth route
+        next("/"); // Redirect them to the root or another appropriate route
+      } else if (requiresAuth && !user) {
+        // If the route requires authentication and the user is not authenticated
+        next("/auth"); // Redirect to the Auth page
       } else {
-        next(); // Proceed to the requested route
+        // In all other cases, proceed to the requested route
+        next();
       }
     });
   },

@@ -6,6 +6,7 @@ import {
   type RouteLocationNormalized,
   type RouteRecordRaw,
 } from "vue-router";
+import { useUserStore } from '@/stores/userStore';
 import ProjectList from "../views/ProjectList.vue";
 import MyTasks from "../views/MyTasks.vue";
 import ProjectDetails from "../views/ProjectDetails.vue";
@@ -72,8 +73,9 @@ router.beforeEach(
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
-      if (user && isAuthRoute) {
-        // If the user is already authenticated and is trying to access the /auth route
+      if (user && isAuthRoute && user.email) {
+        const userStore = useUserStore();
+        userStore.fetchUserDetailsByEmail(user.email);
         next("/"); // Redirect them to the root or another appropriate route
       } else if (requiresAuth && !user) {
         // If the route requires authentication and the user is not authenticated

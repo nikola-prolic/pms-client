@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
-
 <template>
   <main>
-    <div class="h-full w-full bg-red-200">Settings</div>
+    <TeamTable />
   </main>
 </template>
+
+<script setup lang="ts">
+import TeamTable from "@/components/settings/TeamTable.vue";
+</script>

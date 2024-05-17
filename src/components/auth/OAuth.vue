@@ -31,7 +31,6 @@ const signInWithGoogle = async () => {
 
     if (email) {
       console.log("this thing is working ");
-      // User not found, create new user
       await userStore.registerNewUser(
         email,
         displayName.split(" ")[0],

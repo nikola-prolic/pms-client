@@ -36,8 +36,8 @@ export type Project = {
   organizationId: string;
   deadline: Date;
   createdAt: Date;
-  startedAt: Date;
-  completedAt: Date;
+  startedAt?: Date;
+  completedAt?: Date;
   projectOwnerId: string;
   stakeHolders: string[];
   organization: Organization;
@@ -53,8 +53,8 @@ export type Task = {
   status: Status;
   deadline: Date;
   createdAt: Date;
-  startedAt: Date;
-  completedAt: Date;
+  startedAt?: Date;
+  completedAt?: Date;
   projectId: string;
   assignedUserId?: string;
   project: Project;

@@ -1,10 +1,13 @@
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
 import { apiUrl } from "@/main";
 import type { User } from "@/types/dbTypes";
+import { useOrgStore } from "./organizationStore";
+
 
 export const useUserStore = defineStore("user", () => {
+  const orgStore = useOrgStore()
   const dbUser = ref<User | null>(null);
 
   async function registerNewUser(
@@ -20,7 +23,11 @@ export const useUserStore = defineStore("user", () => {
           email: email,
         },
       });
-      dbUser.value = { ...dbUser.value, ...data.user }; // Update dbUser ref with new data
+      dbUser.value = { ...dbUser.value, ...data.user };
+
+      if (data.user.organizationId) {
+        await orgStore.getOrg(data.user.organizationId)
+      }
 
       console.log("it completed successfully");
     } catch (error: any) {
@@ -30,11 +37,17 @@ export const useUserStore = defineStore("user", () => {
   }
 
   async function fetchUserDetailsByEmail(email: string) {
+    console.log("I got triggered")
     try {
       console.log("email is", email);
+      console.log("I am about to fetch user by email")
       const resp = await axios.get(`${apiUrl}/user/email/${email}`);
-      console.log("data from fetching user by email is:", resp);
+      console.log("I fetched user successfully")
       dbUser.value = { ...resp.data.user };
+      console.log("we got the user: ", resp.data.user)
+      if (resp.data.user.organizationId) {
+        await orgStore.getOrg(resp.data.user.organizationId)
+      }
       return;
     } catch (error) {
       console.error("Error fetching user details by email:", error);
@@ -42,5 +55,31 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
-  return { dbUser, registerNewUser, fetchUserDetailsByEmail };
+  async function updateUser(
+    {
+      id,
+      organizationId
+    }: {
+      id: string,
+      organizationId?: string,
+    }
+  ) {
+    try {
+      const { data } = await axios.put(`${apiUrl}/user/${id}`, {
+        user: {
+          organizationId: organizationId
+        },
+      });
+      if (!data) {
+        throw "server responed with empty object"
+      }
+      dbUser.value = { ...dbUser.value, ...data.user };
+    } catch (error) {
+      console.error("Error fetching user details by email:", error);
+      throw error;
+    }
+
+  }
+
+  return { dbUser, registerNewUser, fetchUserDetailsByEmail, updateUser };
 });

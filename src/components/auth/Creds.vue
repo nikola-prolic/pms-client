@@ -131,6 +131,7 @@ const handleSignUp = async () => {
       email.value,
       password.value,
     );
+    await userStore.registerNewUser(email.value, firstName.value, lastName.value);
     router.push("/");
   } catch (error) {
     errorMessage.value = error.message;

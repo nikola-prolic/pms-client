@@ -12,7 +12,7 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "start": "node server.cjs",
-    "heroku-postbuild": "npm run build-only",
+    "heroku-postbuild": "npm install && npm run build",
     "serve": "npm run build-only && npm start"
   },
   "dependencies": {

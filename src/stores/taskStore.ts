@@ -82,7 +82,7 @@ export const useTaskStore = defineStore("task", () => {
       await projectStore.getProject(currentProject.value.id)
     } catch (err) {
       error.value = "we couldn't delete task"
-      console.log("taskStore | we errored delete tasks", err)
+      console.log("taskStore | we errored deleting tasks", err)
     }
   }
 

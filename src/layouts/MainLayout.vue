@@ -34,10 +34,7 @@ onMounted(async () => {
   try{
   onAuthStateChanged(auth, async (authUser) => {
     if (authUser && authUser.email) {
-      console.log("we are fetching the user")
       await userStore.fetchUserDetailsByEmail(authUser.email);
-      console.log("we have fetched the user")
-      console.log("db user organization", dbUser.value.organization)
 
     } else {
       router.push("/auth"); 
